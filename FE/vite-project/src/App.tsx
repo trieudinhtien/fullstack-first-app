@@ -1,7 +1,8 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ResponsiveAppBar from "./components/Navbar";
 import { useMemo } from "react";
-import useMode from "./stores/theme";
+import { BrowserRouter as Router } from "react-router-dom";
+import useMode from "@stores/theme";
+import RenderRouter from "./routes";
 
 function App() {
   const mode = useMode((state) => state.mode);
@@ -21,11 +22,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div>
-        <ResponsiveAppBar></ResponsiveAppBar>
-        <span>home page</span>
-        <div>home page</div>
-      </div>
+      <Router>
+        <RenderRouter />
+      </Router>
     </ThemeProvider>
   );
 }

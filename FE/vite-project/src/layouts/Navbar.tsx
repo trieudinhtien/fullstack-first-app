@@ -11,7 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import MaterialUISwitch from "./ThemeSwitch";
+import MaterialUISwitch from "../components/ThemeSwitch";
 import useMode from "../stores/theme";
 
 const pages = ["Home", "New Feeds", "Settings"];
