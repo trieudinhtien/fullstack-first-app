@@ -13,7 +13,12 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
 import React, { useEffect } from "react";
+import { loginUser } from "../../../src/services/auth.services";
+import { setToken } from "../../../src/utils";
+import useUser from "@stores/user";
+import { useNavigate } from "react-router-dom";
 
 const CardUI = styled(Card)(() => ({
   display: "flex",
@@ -31,6 +36,9 @@ const LoginPage = () => {
   const [passwordError, setPasswordError] = React.useState<boolean>(false);
   const [passwordErrorMessage, setPasswordErrorMessage] =
     React.useState<string>("");
+  const navigate = useNavigate();
+
+  const { setUser } = useUser();
 
   useEffect(() => {
     fetch("http://localhost:8080/user")
@@ -64,7 +72,7 @@ const LoginPage = () => {
 
     return isValid;
   };
-  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     validateInputs();
 
@@ -83,7 +91,39 @@ const LoginPage = () => {
       password: data.get("password"),
     };
 
-    console.log("userLogin:", userLogin);
+    try {
+      const response = await loginUser(userLogin);
+
+      const { token, user } = response.data;
+
+      //set token localstorage
+      setToken(token);
+
+      //set user to store
+      setUser(user);
+
+      if (user) {
+        enqueueSnackbar("Login Successfully!", {
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          variant: "success",
+        });
+
+        navigate("/");
+      } else {
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      enqueueSnackbar(`${error.response.data.error.message}`, {
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+        variant: "error",
+      });
+    }
   };
 
   return (
