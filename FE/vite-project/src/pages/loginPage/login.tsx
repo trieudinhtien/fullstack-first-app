@@ -13,7 +13,7 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 
 const CardUI = styled(Card)(() => ({
   display: "flex",
@@ -31,6 +31,12 @@ const LoginPage = () => {
   const [passwordError, setPasswordError] = React.useState<boolean>(false);
   const [passwordErrorMessage, setPasswordErrorMessage] =
     React.useState<string>("");
+
+  useEffect(() => {
+    fetch("http://localhost:8080/user")
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }, []);
 
   const validateInputs = () => {
     const email = document.getElementById("email") as HTMLInputElement;
@@ -71,6 +77,13 @@ const LoginPage = () => {
       email: data.get("email"),
       password: data.get("password"),
     });
+
+    const userLogin = {
+      email: data.get("email"),
+      password: data.get("password"),
+    };
+
+    console.log("userLogin:", userLogin);
   };
 
   return (
@@ -112,6 +125,7 @@ const LoginPage = () => {
               id="email"
               type="email"
               name="email"
+              size="small"
               placeholder="your@email.com"
               autoComplete="email"
               autoFocus
@@ -132,6 +146,7 @@ const LoginPage = () => {
               id="password"
               autoComplete="current-password"
               autoFocus
+              size="small"
               required
               fullWidth
               variant="outlined"

@@ -4,16 +4,17 @@ import {
   Box,
   styled,
   Typography,
-  Link,
   Divider,
-  FormControlLabel,
   FormControl,
-  Checkbox,
   Button,
   FormLabel,
   TextField,
+  Grid,
 } from "@mui/material";
 import React from "react";
+import { createUser } from "../../../src/services/auth.services";
+import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const CardUI = styled(Card)(() => ({
   display: "flex",
@@ -29,11 +30,20 @@ const SignUp = () => {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
+  const [firstNameError, setFirstNameError] = React.useState(false);
+  const [firstNameErMessage, setFirstNameErMessage] = React.useState("");
+  const [lastNameError, setLastNameError] = React.useState(false);
+  const [lastNamErMessage, setLastNamErMessage] = React.useState("");
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
 
   const validateInputs = () => {
     const email = document.getElementById("email") as HTMLInputElement;
     const password = document.getElementById("password") as HTMLInputElement;
+    const firstName = document.getElementById("firstName") as HTMLInputElement;
+    const lastName = document.getElementById("lastName") as HTMLInputElement;
 
+    console.log("email:", email.value);
     let isValid = true;
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
@@ -43,6 +53,22 @@ const SignUp = () => {
     } else {
       setEmailError(false);
       setEmailErrorMessage("");
+    }
+
+    if (!firstName.value) {
+      setFirstNameError(true);
+      setFirstNameErMessage("Please enter first name.");
+    } else {
+      setFirstNameError(false);
+      setFirstNameErMessage("");
+    }
+
+    if (!lastName.value) {
+      setLastNameError(true);
+      setLastNamErMessage("Please enter last name.");
+    } else {
+      setLastNameError(false);
+      setLastNamErMessage("");
     }
 
     if (!password.value || password.value.length < 6) {
@@ -57,15 +83,43 @@ const SignUp = () => {
     return isValid;
   };
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    validateInputs();
+
     if (emailError || passwordError) {
-      event.preventDefault();
       return;
     }
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
+
+    const user = {
       password: data.get("password"),
-    });
+      email: data.get("email"),
+      firstName: data.get("firstName"),
+      lastName: data.get("lastName"),
+    };
+
+    createUser(user)
+      .then(() => {
+        enqueueSnackbar("Register Successfully !", {
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          variant: "success",
+        });
+
+        navigate("/sign-in");
+      })
+      .catch((error) =>
+        enqueueSnackbar(`${error.message}`, {
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          variant: "error",
+        })
+      );
   };
 
   return (
@@ -76,6 +130,8 @@ const SignUp = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        background:
+          "linear-gradient(7deg,rgba(48, 144, 179, 1) 27%, rgba(37, 221, 245, 1) 75%, rgba(51, 214, 211, 1) 97%);",
       }}
     >
       <CardUI variant="outlined">
@@ -97,14 +153,60 @@ const SignUp = () => {
             gap: 2,
           }}
         >
+          <Grid container spacing={2}>
+            <Grid size={6}>
+              <FormControl>
+                <FormLabel required htmlFor="email">
+                  Fist Name
+                </FormLabel>
+                <TextField
+                  error={firstNameError}
+                  helperText={firstNameErMessage}
+                  id="firstName"
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  autoComplete="email"
+                  size="small"
+                  required
+                  fullWidth
+                  color={firstNameError ? "error" : "primary"}
+                />
+              </FormControl>
+            </Grid>
+            <Grid size={6}>
+              <FormControl>
+                <FormLabel required htmlFor="email">
+                  Last Name
+                </FormLabel>
+                <TextField
+                  error={lastNameError}
+                  helperText={lastNamErMessage}
+                  id="lastName"
+                  placeholder="Last Name"
+                  type="text"
+                  name="lastName"
+                  required
+                  size="small"
+                  fullWidth
+                  variant="outlined"
+                  color={lastNameError ? "error" : "primary"}
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
+
           <FormControl>
-            <FormLabel htmlFor="email">Email</FormLabel>
+            <FormLabel required htmlFor="email">
+              Email
+            </FormLabel>
             <TextField
               error={emailError}
               helperText={emailErrorMessage}
               id="email"
               type="email"
               name="email"
+              size="small"
               placeholder="your@email.com"
               autoComplete="email"
               autoFocus
@@ -115,7 +217,9 @@ const SignUp = () => {
             />
           </FormControl>
           <FormControl>
-            <FormLabel htmlFor="password">Password</FormLabel>
+            <FormLabel required htmlFor="password">
+              Password
+            </FormLabel>
             <TextField
               error={passwordError}
               helperText={passwordErrorMessage}
@@ -123,6 +227,7 @@ const SignUp = () => {
               placeholder="••••••"
               type="password"
               id="password"
+              size="small"
               autoComplete="current-password"
               autoFocus
               required

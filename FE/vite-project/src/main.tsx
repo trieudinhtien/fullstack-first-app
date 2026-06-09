@@ -3,4 +3,10 @@ import "./index.css";
 import App from "./App.tsx";
 import "@fontsource/inter";
 
-createRoot(document.getElementById("root")!).render(<App />);
+import { SnackbarProvider } from "notistack";
+
+createRoot(document.getElementById("root")!).render(
+  <SnackbarProvider autoHideDuration={2000}>
+    <App />
+  </SnackbarProvider>
+);
