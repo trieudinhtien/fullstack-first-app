@@ -13,11 +13,24 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import MaterialUISwitch from "../components/ThemeSwitch";
 import useMode from "../stores/theme";
+import { removeToken } from "../../src/utils";
+import useUser from "@stores/user";
+import { useNavigate } from "react-router-dom";
+import SettingsIcon from "@mui/icons-material/Settings";
+import PersonIcon from "@mui/icons-material/Person";
+import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ModalMyProfile from "./modalMyProfile";
 
-const pages = ["Home", "New Feeds", "Settings"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  { title: "My Profile", icon: <PersonIcon /> },
+  { title: "Settings", icon: <SettingsIcon /> },
+  { title: "Notification", icon: <NotificationsActiveIcon /> },
+  { title: "Logout", icon: <LogoutIcon /> },
+];
 
 function ResponsiveAppBar() {
+  const { user, setUser } = useUser();
   const mode = useMode((state) => state.mode);
   const changeMode = useMode((state) => state.changeMode);
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -26,6 +39,11 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  console.log("user:", user);
+  const [openProfile, setOpenProfile] = React.useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -42,10 +60,30 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  //logout
+  const handleLogout = () => {
+    removeToken();
+    setUser(null);
+    navigate("/sign-in");
+  };
+
   //Change theme dark- light
   const handleChangeTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
     const status: boolean = e.target.checked;
     changeMode(status);
+  };
+
+  const handleClickMenu = (setting: string) => {
+    switch (setting) {
+      case "Logout":
+        handleLogout();
+        break;
+      case "My Profile":
+        setOpenProfile(true);
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -66,41 +104,9 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
           <Box sx={{ mr: 3 }}>
             <MaterialUISwitch
               checked={mode}
@@ -110,7 +116,10 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/avatar.jpg" />
+                <Avatar
+                  alt="Remy Sharp"
+                  src={user?.image ? user.image : "/no-avatar.jpg"}
+                />
               </IconButton>
             </Tooltip>
 
@@ -131,9 +140,13 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting?.title}
+                  onClick={() => handleClickMenu(setting?.title)}
+                >
+                  <Box sx={{ mr: 2 }}>{setting.icon}</Box>
                   <Typography sx={{ textAlign: "center" }}>
-                    {setting}
+                    {setting?.title}
                   </Typography>
                 </MenuItem>
               ))}
@@ -141,6 +154,12 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
+      {
+        <ModalMyProfile
+          open={openProfile}
+          handleCancel={() => setOpenProfile(false)}
+        />
+      }
     </AppBar>
   );
 }

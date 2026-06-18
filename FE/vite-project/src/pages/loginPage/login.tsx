@@ -13,10 +13,9 @@ import {
   FormLabel,
   TextField,
 } from "@mui/material";
-import { enqueueSnackbar } from "notistack";
 import React, { useEffect } from "react";
 import { loginUser } from "../../../src/services/auth.services";
-import { setToken } from "../../../src/utils";
+import { messageError, messageSuccess, setToken } from "../../../src/utils";
 import useUser from "@stores/user";
 import { useNavigate } from "react-router-dom";
 
@@ -94,7 +93,7 @@ const LoginPage = () => {
     try {
       const response = await loginUser(userLogin);
 
-      const { token, user } = response.data;
+      const { token, user } = response;
 
       //set token localstorage
       setToken(token);
@@ -103,26 +102,14 @@ const LoginPage = () => {
       setUser(user);
 
       if (user) {
-        enqueueSnackbar("Login Successfully!", {
-          anchorOrigin: {
-            vertical: "top",
-            horizontal: "right",
-          },
-          variant: "success",
-        });
+        messageSuccess("Login Successfully!");
 
         navigate("/");
       } else {
         navigate("/sign-in");
       }
     } catch (error) {
-      enqueueSnackbar(`${error.response.data.error.message}`, {
-        anchorOrigin: {
-          vertical: "top",
-          horizontal: "right",
-        },
-        variant: "error",
-      });
+      messageError(error.response.data.error.message);
     }
   };
 

@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = 8080;
 const cors = require('cors');
-const { QueryTypes } = require('sequelize');
 const sequelize = require('./configs/database');
 
 const router = require('./routes/api');
@@ -21,8 +20,6 @@ const start  = async() => {
 
   //init router
   app.use('/', router);
-
-
 
   //start port 8080
   app.listen(port, () => {

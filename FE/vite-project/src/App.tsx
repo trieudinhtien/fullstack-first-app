@@ -3,20 +3,14 @@ import { useMemo } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import useMode from "@stores/theme";
 import RenderRouter from "./routes";
+import { themeConfig } from "./utils/theme.config";
+import type { ThemeOptions } from "@mui/material/styles";
 
 function App() {
   const mode = useMode((state) => state.mode);
 
   const theme = useMemo(
-    () =>
-      createTheme({
-        typography: {
-          fontFamily: "Inter, sans-serif",
-        },
-        palette: {
-          mode: mode ? "dark" : "light",
-        },
-      }),
+    () => createTheme(themeConfig(mode) as ThemeOptions),
     [mode]
   );
 

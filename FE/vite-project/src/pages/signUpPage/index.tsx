@@ -9,6 +9,7 @@ import {
   Button,
   FormLabel,
   TextField,
+  Link,
   Grid,
 } from "@mui/material";
 import React from "react";
@@ -23,6 +24,7 @@ const CardUI = styled(Card)(() => ({
   width: "400px",
   margin: "auto",
   padding: 25,
+  boxShadow: "1px -1px 16px -1px rgba(0,0,0,0.65)",
 }));
 
 const SignUp = () => {
@@ -258,6 +260,12 @@ const SignUp = () => {
           >
             Sign in with Facebook
           </Button>
+          <Typography sx={{ textAlign: "center" }}>
+            You have an account?{" "}
+            <Link href="/sign-in" variant="body2" sx={{ alignSelf: "center" }}>
+              Sign In
+            </Link>
+          </Typography>
         </Box>
       </CardUI>
     </Box>

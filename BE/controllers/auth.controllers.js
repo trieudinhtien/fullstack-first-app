@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const { User } = require("../models");
 const jwt = require('jsonwebtoken');
 
@@ -72,6 +73,9 @@ const Login = async (req, res) => {
         lastName: userFindFromDb.lastName,
         firstName: userFindFromDb.firstName,
         age: userFindFromDb.age,
+        country: userFindFromDb.country,
+        image: userFindFromDb.image
+
       },
     })
     
@@ -82,6 +86,7 @@ const Login = async (req, res) => {
   }
   
 }
+
 
 
 const GetAllUsers = async (req, res) => {
@@ -96,6 +101,77 @@ const GetAllUsers = async (req, res) => {
   }
 }
 
+const UpdateUser = async (req, res) => {
+  try {
+    const data = req.body;
+    const id = req.params.id;
+
+    await User.update(
+      {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        age: data.age,
+        country: data.country,
+        image: data.image,
+      },
+      {
+        where: {
+          id
+        }
+      }
+    );
+    res.status(200).json({data, message: 'Updated sucessfully!'});
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    })
+  }
+}
+
+const DeleteUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await User.destroy({
+      where: {
+        id: id
+      }
+    })
+    res.status(200).json({message: 'Delete sucessfully!'});
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    })
+  }
+}
+
+const UpdateAvatar = async (req, res) => { 
+  try {
+    const id = req.params.id;
+    const data = req.body;
+
+    console.log('UpdateAvatar:', id, data);
+    
+
+    await User.update(
+      {
+        image: data.image,
+      },
+      {
+        where: {
+          id
+        }
+      }
+    );
+
+    res.status(200).json({message: 'Avatar Change sucessfully!'});
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    })
+  }
+}
+
 module.exports = {
-  Register, Login, GetAllUsers,
+  Register, Login, GetAllUsers,UpdateUser,DeleteUser, UpdateAvatar
 }

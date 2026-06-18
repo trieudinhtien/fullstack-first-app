@@ -1,9 +1,17 @@
 import type { FC } from "react";
 import { useRoutes } from "react-router-dom";
 import LayoutPage from "../layouts";
-import HomePage from "@pages/homePage";
 import LoginPage from "@pages/loginPage/login";
 import SignUp from "@pages/signUpPage";
+import ProtectedRoute from "./protectedRoute";
+import DienNuocPage from "@pages/DienNuocPage";
+import HoaDonPage from "@pages/HoaDonPage";
+import KhuTroPage from "@pages/KhuTroPage";
+import NguoiThuePage from "@pages/NguoiThuePage";
+import PhongPage from "@pages/PhongPage";
+import ThanhToanPage from "@pages/ThanhToanPage";
+import HopDongPage from "@pages/HopDongPage";
+import DashboardPage from "@pages/dashboardPage/DashboardPage";
 
 const routeList = [
   {
@@ -16,8 +24,77 @@ const routeList = [
   },
   {
     path: "/",
-    element: <LayoutPage />,
-    children: [{ path: "homepage", element: <HomePage /> }],
+    element: (
+      <ProtectedRoute>
+        <LayoutPage />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "/dashboard",
+        element: (
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/energy",
+        element: (
+          <ProtectedRoute>
+            <DienNuocPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/invoice",
+        element: (
+          <ProtectedRoute>
+            <HoaDonPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/area",
+        element: (
+          <ProtectedRoute>
+            <KhuTroPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/tenant",
+        element: (
+          <ProtectedRoute>
+            <NguoiThuePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/room",
+        element: (
+          <ProtectedRoute>
+            <PhongPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/payment",
+        element: (
+          <ProtectedRoute>
+            <ThanhToanPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/contract",
+        element: (
+          <ProtectedRoute>
+            <HopDongPage />
+          </ProtectedRoute>
+        ),
+      },
+    ],
   },
 ];
 

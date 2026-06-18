@@ -1,24 +1,19 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../configs/database');
 
-const User = sequelize.define(
-  'User',
+const Room = sequelize.define(
+  'Room',
   {
-    // Model attributes are defined here
-
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    image: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    email: {
+    code: {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -47,4 +42,4 @@ const User = sequelize.define(
   },
 );
 
-module.exports = User;
+module.exports = Room;
