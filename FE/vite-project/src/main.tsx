@@ -6,7 +6,7 @@ import "@fontsource/inter";
 import { SnackbarProvider } from "notistack";
 
 createRoot(document.getElementById("root")!).render(
-  <SnackbarProvider autoHideDuration={2000}>
+  <SnackbarProvider autoHideDuration={1000}>
     <App />
   </SnackbarProvider>
 );

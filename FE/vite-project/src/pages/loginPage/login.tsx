@@ -104,7 +104,7 @@ const LoginPage = () => {
       if (user) {
         messageSuccess("Login Successfully!");
 
-        navigate("/");
+        navigate("/dashboard");
       } else {
         navigate("/sign-in");
       }

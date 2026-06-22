@@ -17,5 +17,5 @@ export const deleteUser = async (id) => {
 };
 
 export const updateAvatar = async (id, imageBase64) => {
-  return axiosInstance.patch(`/v1/api/avatar/${id}`, imageBase64);
+  return axiosInstance.patch(`/v1/api/avatar/${id}`, { image: imageBase64 });
 };

@@ -23,6 +23,10 @@ axiosInstance.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response?.status === 401) {
+      console.log("window.location.href:", window.location.href);
+      if (window.location.href.includes("/sign-in")) {
+        return Promise.reject(error);
+      }
       removeToken();
       window.location.href = "/sign-in";
     }

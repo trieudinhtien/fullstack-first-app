@@ -9,37 +9,45 @@ const Room = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+
     code: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
-    
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
 
-    },
-    age: {
+    floor: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-      defaultValue: null
+      allowNull: false,
     },
-    country: {
-      type: DataTypes.STRING,
-      allowNull: true, // not is default true ,
+
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+
+    status: {
+      type: DataTypes.ENUM(
+        'available',
+        'occupied',
+        'maintenance'
+      ),
+      defaultValue: 'available',
+    },
+
+    areaId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Areas',
+        key: 'id',
+      },
     },
   },
   {
-    // Other model options go here
-  },
+    tableName: 'Rooms',
+    paranoid: true,
+  }
 );
 
 module.exports = Room;

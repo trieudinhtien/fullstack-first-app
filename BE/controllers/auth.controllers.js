@@ -150,9 +150,6 @@ const UpdateAvatar = async (req, res) => {
     const id = req.params.id;
     const data = req.body;
 
-    console.log('UpdateAvatar:', id, data);
-    
-
     await User.update(
       {
         image: data.image,
