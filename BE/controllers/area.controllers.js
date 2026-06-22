@@ -1,4 +1,4 @@
-const { Area } = require("../models")
+const { Area, Room, Tenant } = require("../models")
 
 const {paginate} = require('./helper');
 
@@ -14,6 +14,16 @@ const  GetAllArea = async (req, res) => {
     const { count, rows } = await Area.findAndCountAll({
       offset: offset,
       limit: limit,
+      include: [
+        {
+          model: Room,
+          as: "rooms",
+          include: [
+            {model: Tenant,
+            as: "tenants",}
+          ],
+        },
+      ],
     });
 
 

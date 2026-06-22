@@ -1,5 +1,5 @@
 const { where } = require("sequelize");
-const { User } = require("../models");
+const { User, Tenant } = require("../models");
 const jwt = require('jsonwebtoken');
 
 const Register = async (req, res) => {
@@ -12,12 +12,15 @@ const Register = async (req, res) => {
       email,
       password,
       age,
-      country, 
+      country,
+      role: 'TENANT', 
     }
     
     const user = await User.create(formData);
+
+      const tenant = await Tenant.create({userId: user.id})
     
-    res.status(200).json(user);
+    res.status(200).json({...user, tenant: {...tenant}});
   } catch (error) {
     res.status(500).json({
       message: error.message,

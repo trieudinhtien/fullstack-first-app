@@ -116,15 +116,7 @@ const UpdateStatusRoom = async(req, res) => {
 const GetRoomsByArea = async(req, res) => { 
   try {
     const id = req.params.id;
-
-    const page = req.params.page;
-    const limit = req.params.limit;
-
-    const { offset, limit } = paginate(page, limit);
-
     const data = await Area.findByPk(id, {
-      limit: limit,
-      offset: offset,
       include: [
         {
           model: Room,

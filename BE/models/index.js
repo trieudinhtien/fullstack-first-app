@@ -19,11 +19,22 @@ Room.belongsTo(Area, {
 Tenant.belongsTo(Room, {
   foreignKey: 'roomId',
   as: 'room',
+  onDelete: 'SET NULL',
 })
 
 Room.hasMany(Tenant, {
   foreignKey: 'roomId',
-  as: 'tenants'
+  as: 'tenants',
+})
+
+User.hasOne(Tenant, {
+  foreignKey: 'userId',
+  as: 'tenant'
+})
+
+Tenant.belongsTo(User, {
+  foreignKey: 'userId',
+  as: 'user'
 })
 
 

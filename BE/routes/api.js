@@ -2,7 +2,7 @@ const express = require('express');
 const { Register, Login, GetAllUsers, UpdateUser, DeleteUser, UpdateAvatar } = require('../controllers/auth.controllers');
 const {GetAllArea, CreateArea, EditArea, DeleteArea} = require('../controllers/area.controllers')
 const {GetAllRooms, GetDetailRooms, GetRoomsByArea, CreateRoom, UpdateRoom, DeleteRoom, UpdateStatusRoom} = require('../controllers/room.controllers')
-const {GetAllTenants} = require('../controllers/tenant.controllers');
+const {GetAllTenants, GetTenantById} = require('../controllers/tenant.controllers');
 
 const {verifyToken} = require('../middlewares/auth.middleware');
 
@@ -39,6 +39,8 @@ router.patch('/v1/api/rooms/:id/area', verifyToken, UpdateStatusRoom);
 
 //tenant
 router.get('/v1/api/tenants',verifyToken, GetAllTenants);
+router.get('/v1/api/tenants/:id',verifyToken, GetTenantById);
+
 
 
 

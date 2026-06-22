@@ -41,10 +41,15 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true, // not is default true ,
     },
+    role: {
+      type: DataTypes.ENUM(
+        'ADMIN',
+        'TENANT',
+      ),
+      defaultValue: null,
+    }
   },
-  {
-    paranoid: true
-  },
+ 
 );
 
 module.exports = User;

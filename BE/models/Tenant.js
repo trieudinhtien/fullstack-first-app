@@ -10,17 +10,8 @@ const Tenant = sequelize.define(
       autoIncrement: true,
     },
 
-    fullName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
 
     phone: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-
-    email: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -32,7 +23,7 @@ const Tenant = sequelize.define(
 
     checkInDate: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
+      allowNull: true,
     },
 
     checkOutDate: {
@@ -42,12 +33,12 @@ const Tenant = sequelize.define(
 
     roomId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'Rooms',
-        key: 'id',
-      },
+      allowNull: true,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   },
   {
     tableName: 'Tenants',

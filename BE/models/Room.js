@@ -13,7 +13,6 @@ const Room = sequelize.define(
     code: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
 
     floor: {
@@ -38,10 +37,6 @@ const Room = sequelize.define(
     areaId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: 'Areas',
-        key: 'id',
-      },
     },
   },
   {
