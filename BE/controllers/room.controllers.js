@@ -132,7 +132,6 @@ const GetRoomsByArea = async(req, res) => {
       message: error.message
     })
   }
-  
 }
 
 

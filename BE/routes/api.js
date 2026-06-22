@@ -1,9 +1,8 @@
 const express = require('express');
-const { GetHomePage } = require('../controllers/home.controllers');
 const { Register, Login, GetAllUsers, UpdateUser, DeleteUser, UpdateAvatar } = require('../controllers/auth.controllers');
 const {GetAllArea, CreateArea, EditArea, DeleteArea} = require('../controllers/area.controllers')
-
-const {GetAllRooms, GetDetailRooms, GetRoomsByArea} = require('../controllers/room.controllers')
+const {GetAllRooms, GetDetailRooms, GetRoomsByArea, CreateRoom, UpdateRoom, DeleteRoom, UpdateStatusRoom} = require('../controllers/room.controllers')
+const {GetAllTenants} = require('../controllers/tenant.controllers');
 
 const {verifyToken} = require('../middlewares/auth.middleware');
 
@@ -21,27 +20,25 @@ router.patch('/v1/api/avatar/:id',verifyToken, UpdateAvatar);
 
 
 
-//area (khu tro)
+//area
 router.get('/v1/api/area',verifyToken, GetAllArea)
 router.post('/v1/api/area', verifyToken, CreateArea);
 router.put('/v1/api/area/:id', verifyToken, EditArea);
 router.delete('/v1/api/area/:id', verifyToken, DeleteArea);
 
 //room
-
 router.get('/v1/api/rooms',verifyToken, GetAllRooms)
 router.get('/v1/api/rooms/:id',verifyToken, GetDetailRooms);
-
 router.get('/v1/api/rooms/:id/area', verifyToken, GetRoomsByArea);
-
-// router.post('/v1/api/rooms', verifyToken, CreateRooms);
-// router.put('/v1/api/rooms/:id', verifyToken, EditRooms);
-// router.delete('/v1/api/rooms/:id', verifyToken, DeleteRooms);
-
-
-
+router.post('/v1/api/rooms', verifyToken, CreateRoom);
+router.put('/v1/api/rooms/:id', verifyToken, UpdateRoom);
+router.delete('/v1/api/rooms/:id', verifyToken, DeleteRoom);
+//update status room
+router.patch('/v1/api/rooms/:id/area', verifyToken, UpdateStatusRoom);
 
 
+//tenant
+router.get('/v1/api/tenants',verifyToken, GetAllTenants);
 
 
 
